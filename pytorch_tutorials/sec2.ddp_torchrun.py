@@ -1,3 +1,5 @@
+# torchrun --nnodes=1 --nproc_per_node=4 --rdzv_id=100 --rdzv_backend=c10d --rdzv_endpoint=localhost:29400 sec2.ddp_torchrun.py
+
 import torch
 import torch.distributed as dist
 import torch.nn as nn
@@ -16,7 +18,7 @@ class ToyModel(nn.Module):
         return self.net2(self.relu(self.net1(x)))
 
 def demo_basic():
-    dist.init_process_group("gloo")
+    dist.init_process_group("gloo") # use nccl on AWS, gloo on discovery A100
     rank = dist.get_rank()
     print(f"Start running basic DDP example on rank {rank}.")
 
